@@ -38,6 +38,7 @@ cd MapReducer
 ## 4. Chạy với Spark 
 ### Train
 ```bash
+cd Spark
 spark-submit --master yarn --deploy-mode client train_sentiment.py
 ```
 ### Test
