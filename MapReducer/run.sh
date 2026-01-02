@@ -1,10 +1,12 @@
 #!/bin/bash
 
-EPOCHS=10  
+EPOCHS=5  
 HDFS_INPUT="/btl/data/IMDB.csv"
 HDFS_OUTPUT="/btl/mapreducer/output/gradient_epoch"
 WEIGHTS_FILE="weights.txt"
 export PYTHONHASHSEED=42
+START_TIME=$(date +%s)
+echo "Bắt đầu huấn luyện MapReduce lúc: $(date)"
 
 rm -f .${WEIGHTS_FILE}.crc
 
@@ -60,4 +62,11 @@ do
     fi
 done
 
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo ""
+echo "=================================================="
 echo "Training finished!"
+echo "TỔNG THỜI GIAN CHẠY MAPREDUCE: $DURATION giây"
+echo "=================================================="

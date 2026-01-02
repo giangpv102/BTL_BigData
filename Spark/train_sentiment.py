@@ -3,13 +3,14 @@ from pyspark.ml.feature import Tokenizer, StopWordsRemover, HashingTF, IDF, Stri
 from pyspark.ml.classification import LogisticRegression 
 from pyspark.ml import Pipeline
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+import time
 
 spark = SparkSession.builder \
     .appName("Sentiment_Train_LogisticRegression") \
     .master("yarn") \
     .getOrCreate()
 spark.sparkContext.setLogLevel("WARN")
-
+start_time = time.time()
 print("--- Đang đọc dữ liệu ---")
 data_path = "hdfs:///btl/data/IMDB.csv"
 df = spark.read.csv(data_path, header=True, inferSchema=True, multiLine=True, escape="\"")
@@ -45,7 +46,8 @@ pipeline = Pipeline(stages=[tokenizer, remover, hashingTF, lr])
 
 print("--- Đang huấn luyện mô hình Logistic Regression ---")
 model = pipeline.fit(train_data)
-
+end_time = time.time()
+training_duration = end_time - start_time
 predictions = model.transform(test_data)
 evaluator = MulticlassClassificationEvaluator(labelCol="label", predictionCol="prediction", metricName="accuracy")
 accuracy = evaluator.evaluate(predictions)
@@ -54,6 +56,9 @@ print(f"--- Độ chính xác (Accuracy): {accuracy * 100:.2f}% ---")
 #Lưu model vào đường dẫn mới
 output_path = "hdfs:///btl/spark/output/logistic_regression_model"
 model.write().overwrite().save(output_path)
-print(f"Đã lưu model tại: {output_path}")
 
+print(f"Đã lưu model tại: {output_path}")
+print("\n" + "="*40)
+print(f"TỔNG THỜI GIAN CHẠY SPARK: {training_duration:.2f} giây")
+print("="*40 + "\n")
 spark.stop()
