@@ -6,12 +6,9 @@ HDFS_INPUT="/btl/data/IMDB.csv"
 HDFS_OUTPUT="/btl/mapreducer/output/test"
 WEIGHTS_FILE="weights.txt"
 export PYTHONHASHSEED=42
-# --- KIỂM TRA ĐIỀU KIỆN ---
-if [ ! -f "$WEIGHTS_FILE" ]; then
-    echo "LỖI: Không tìm thấy file mô hình '$WEIGHTS_FILE'."
-    echo "Vui lòng chạy train.sh trước để tạo file weights."
-    exit 1
-fi
+
+rm -f weights.txt
+hdfs dfs -getmerge /btl/mapreducer/output/gradient_epoch weights.txt
 
 echo "Đang chạy kiểm thử với mô hình Logistic Regression..."
 

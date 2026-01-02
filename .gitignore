@@ -1,6 +1,11 @@
 IMDB_Datasets.csv
-.history
+.history/
 imdb_big_2.csv
 .~*
-.weights.txt.crc
+.weights*
 t.txt
+.model*
+weights.txt
+weights.txt.*
+**/.weights*
+**/.model.*

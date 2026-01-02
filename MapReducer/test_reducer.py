@@ -33,7 +33,7 @@ for line in sys.stdin:
             neg_percent = (1.0 - prob_score) * 100
             pred_str = "Positive" if predicted == 1 else "Negative"
             act_str = "Positive" if actual == 1 else "Negative"
-            result_str = "CORRECT" if is_correct else "WRONG"
+            result_str = "Chính xác" if is_correct else "Sai"
             
             print(f"{pred_str:<10} | {act_str:<10} | {pos_percent:6.2f}%   | {neg_percent:6.2f}%   | {result_str:<10}")
             print_count += 1

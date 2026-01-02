@@ -26,7 +26,6 @@ print(f"\n[INFO] Mapping nhãn: 0.0 = {labels[0]}, 1.0 = {labels[1]}")
 tokenizer = Tokenizer(inputCol="review", outputCol="words")
 default_stop_words = StopWordsRemover.loadDefaultStopWords("english")
 
-# DANH SÁCH CÁC TỪ QUAN TRỌNG GIỮ NGUYÊN
 sentimental_words = ["like", "love", "good", "bad", "great", "terrible", 
                      "not", "no", "nor", "but", "best", "worst", "better"]
 
@@ -35,15 +34,12 @@ new_stop_words = [w for w in default_stop_words if w not in sentimental_words]
 remover = StopWordsRemover(inputCol="words", outputCol="filtered", stopWords=new_stop_words)
 
 hashingTF = HashingTF(inputCol="filtered", outputCol="rawFeatures", numFeatures=5000)
-idf = IDF(inputCol="rawFeatures", outputCol="features")
 
-# Khởi tạo Logistic Regression
-# maxIter: số lần lặp tối đa
 # regParam: tham số Regularization (chống overfitting)
 # elasticNetParam: 0.0 là L2 (Ridge), 1.0 là L1 (Lasso). Để 0.0 cho chạy nhanh và ổn định.
-lr = LogisticRegression(maxIter=20, regParam=0.01, elasticNetParam=0.0, labelCol="label", featuresCol="features")
+lr = LogisticRegression(maxIter=20, regParam=0.01, elasticNetParam=0.0, labelCol="label", featuresCol="rawFeatures")
 
-pipeline = Pipeline(stages=[tokenizer, remover, hashingTF, idf, lr])
+pipeline = Pipeline(stages=[tokenizer, remover, hashingTF, lr])
 
 (train_data, test_data) = df_indexed.randomSplit([0.8, 0.2], seed=42)
 
