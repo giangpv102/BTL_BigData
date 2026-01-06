@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("/home/giangpv102/Documents/BigData/BTL/IMDB/IMDB.csv")
+df = pd.read_csv("./IMDB/IMDB.csv")
 
 # Bỏ dòng đầu tiên
 df = df.iloc[1:].reset_index(drop=True)
